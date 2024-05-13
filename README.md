@@ -73,9 +73,9 @@ model = MOMENTPipeline.from_pretrained(
 Here is the list of tutorials to get started with MOMENT for various tasks:
 - [Forecasting](./tutorials/forecasting.ipynb)
 - [Classification](./tutorials/classification.ipynb)
-- [Anomaly Detection](.tutorials/anomaly_detection.ipynb)
+- [Anomaly Detection](./tutorials/anomaly_detection.ipynb)
 - [Imputation](./tutorials/imputation.ipynb)
-- [Embedding](./tutorials/embedding.ipynb)
+- [Representation Learning](./tutorials/representation_learning.ipynb)
 
 ## BibTeX
 
