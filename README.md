@@ -46,7 +46,7 @@ model = MOMENTPipeline.from_pretrained(
 model.init()
 ```
 
-**Anomaly Detection/Imputation/Pre-training**
+**Anomaly Detection, Imputation, and Pre-training**
 ```python
 from moment import MOMENTPipeline
 
@@ -57,7 +57,7 @@ model = MOMENTPipeline.from_pretrained(
 mode.init()
 ```
 
-**Embedding**
+**Representation Learning**
 ```python
 from moment import MOMENTPipeline
 
