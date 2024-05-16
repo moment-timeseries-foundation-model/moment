@@ -88,6 +88,9 @@ Here is the list of tutorials to get started with MOMENT for various tasks:
 }
 ```
 
+## Research Code
+We designed this codebase to be extremely lightweight, and in the process removed a lot of code! We are working on releasing (complete but messier) research code, which will include code to handly different datasets, and scripts for pre-training, fine-tuning and evaluating MOMENT alongside other baselines. An early version of this code is available on [Anonymous Github](https://anonymous.4open.science/r/BETT-773F/README.md).
+
 ## Contributions
 We encourage researchers to contribute their methods and datasets to MOMENT. We are actively working on contributing guidelines. Stay tuned for updates!
 
