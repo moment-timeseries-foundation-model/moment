@@ -1,5 +1,12 @@
-# MOMENT
-Official code for the paper MOMENT: A Family of Open Time-series Foundation Models. 
+<div align="center">
+# MOMENT: A Family of Open Time-series Foundation Models    
+
+[![preprint](https://img.shields.io/static/v1?label=arXiv&message=2402.03885&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2402.03885)
+[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-FFD21E)](https://huggingface.co/AutonLab/MOMENT-1-large)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/license/MIT)
+</div>
+
+
 
 ## Introduction
 We introduce MOMENT, a family of open-source foundation models for general-purpose time-series analysis. Pre-training large models on time-series data is challenging due to (1) the absence a large and cohesive public time-series repository, and (2) diverse time-series characteristics which make multi-dataset training onerous. Additionally, (3) experimental benchmarks to evaluate these models especially in scenarios with limited resources, time, and supervision, are still in its nascent stages. To address these challenges, we compile a large and diverse collection of public time-series, called the Time-series Pile, and systematically tackle time-series-specific challenges to unlock large-scale multi-dataset pre-training. Finally, we build on recent work to design a benchmark to evaluate time-series foundation models on diverse tasks and datasets in limited supervision settings. Experiments on this benchmark demonstrate the effectiveness of our pre-trained models with minimal data and task-specific fine-tuning. Finally, we present several interesting empirical observations about large pre-trained time-series models.
@@ -93,6 +100,9 @@ We designed this codebase to be extremely lightweight, and in the process remove
 
 ## Contributions
 We encourage researchers to contribute their methods and datasets to MOMENT. We are actively working on contributing guidelines. Stay tuned for updates!
+
+## Coverage
+
 
 ## License
 
