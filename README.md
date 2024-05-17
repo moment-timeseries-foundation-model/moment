@@ -73,6 +73,7 @@ model = MOMENTPipeline.from_pretrained(
 )
 ```
 
+
 ## 🧑‍🏫 Tutorials
 
 <!-- We provide tutorials to demonstrate how to use and fine-tune our pre-trained model on various tasks. -->
@@ -82,6 +83,9 @@ Here is the list of tutorials to get started with MOMENT for various tasks:
 - [Anomaly Detection](./tutorials/anomaly_detection.ipynb)
 - [Imputation](./tutorials/imputation.ipynb)
 - [Representation Learning](./tutorials/representation_learning.ipynb)
+
+> [!TIP]
+> Have more questions about using MOMENT? Checkout [Frequently Asked Questions](https://docs.google.com/document/d/18P3-ghnFXO57Wyvg6IuMNOzDyHpR0RxQlkvBWig2DiI/edit?usp=sharing), and you might find your answer!
 
 ## BibTeX
 
