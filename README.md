@@ -111,12 +111,15 @@ Dr. Tehseen Zia
 
 
 ## 🤟 Contemporary Work
-There's a lot of cool work on building time series forecasting foundation models! Here's an incomplete list:
+There's a lot of cool work on building time series forecasting foundation models! Here's an incomplete list. Checkout Table 9 in our [paper](https://arxiv.org/abs/2402.03885) for qualitative comparisons with these studies: 
 - TimeGPT-1 by [Nixtla](https://www.nixtla.io/), [[Paper](https://arxiv.org/abs/2310.03589), [API](https://github.com/Nixtla/nixtla)]
 - Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting by Morgan Stanley and ServiceNow Research, [[Paper](https://arxiv.org/abs/2310.08278), [Code](https://github.com/time-series-foundation-models/lag-llama), [Hugging Face](https://huggingface.co/time-series-foundation-models/Lag-Llama)]
 - Tiny Time Mixers (TTMs): Fast Pre-trained Models for Enhanced Zero/Few-Shot Forecasting of Multivariate Time Series by IBM, [[Paper](https://arxiv.org/abs/2401.03955), [Hugging Face](https://huggingface.co/ibm-granite/granite-timeseries-ttm-v1)]
 - Moirai: A Time Series Foundation Model for Universal Forecasting [[Paper](https://arxiv.org/abs/2402.02592), [Code](https://github.com/SalesforceAIResearch/uni2ts), [Hugging Face](https://huggingface.co/Salesforce/moirai-1.0-R-large)]
+- A decoder-only foundation model for time-series forecasting by Google, [[Paper](https://arxiv.org/abs/2310.10688), [Code](https://github.com/google-research/timesfm), [Hugging Face](https://huggingface.co/google/timesfm-1.0-200m)]
 - Chronos: Learning the Language of Time Series by Amazon, [[Paper](https://arxiv.org/abs/2403.07815), [Code](https://github.com/amazon-science/chronos-forecasting), [Hugging Face](https://huggingface.co/collections/amazon/chronos-models-65f1791d630a8d57cb718444)]
+
+There's also some recent work on solving multiple time series modeling tasks in addition to forecasting: 
 - TOTEM: TOkenized Time Series EMbeddings for General Time Series Analysis [[Paper](https://arxiv.org/abs/2402.16412), [Code](https://github.com/SaberaTalukder/TOTEM)]
 
 ## 🪪 License
