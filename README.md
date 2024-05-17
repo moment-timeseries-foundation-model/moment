@@ -14,6 +14,22 @@
 ## 📖 Introduction
 We introduce MOMENT, a family of open-source foundation models for general-purpose time-series analysis. Pre-training large models on time-series data is challenging due to (1) the absence a large and cohesive public time-series repository, and (2) diverse time-series characteristics which make multi-dataset training onerous. Additionally, (3) experimental benchmarks to evaluate these models especially in scenarios with limited resources, time, and supervision, are still in its nascent stages. To address these challenges, we compile a large and diverse collection of public time-series, called the Time-series Pile, and systematically tackle time-series-specific challenges to unlock large-scale multi-dataset pre-training. Finally, we build on recent work to design a benchmark to evaluate time-series foundation models on diverse tasks and datasets in limited supervision settings. Experiments on this benchmark demonstrate the effectiveness of our pre-trained models with minimal data and task-specific fine-tuning. Finally, we present several interesting empirical observations about large pre-trained time-series models.
 
+### MOMENT: One Model, Many Time Series Tasks, Less SupervisiondMOMENT can solve multiple time series analysis tasks well in settings with limited supervision, for example zero-shot anomaly detection and imputation, and unsupervised represenation learning for classification!
+
+<div align="center">
+    <img src="assets/moment_comparison .png" width="40%">
+</div>
+
+### MOMENT Architecture in a Nutshell
+
+A time series is broken into disjoint fixed-length sub-sequences called patches, and each patch is mapped into a D-dimensional patch embedding. During pre-training, we mask patches uniformly at random by replacing their patch embeddings using a special mask embedding `[MASK]`. The goal of pre-training is to learn patch embeddings which can be used to reconstruct the input time series using a light-weight reconstruction head.
+
+<div align="center">
+    <img src="assets/moment_architecture.png" width="60%">
+</div>
+
+
+
 ## 🧑‍💻 Usage
 
 Install the package using:
