@@ -7,10 +7,14 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/license/MIT)
 </div>
 
-## Introduction
+## 🔥 News
+- MOMENT was accepted at ICML 2024!
+- We are working on releasing the MOMENT research code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)! Stay tuned for updates!
+
+## 📖 Introduction
 We introduce MOMENT, a family of open-source foundation models for general-purpose time-series analysis. Pre-training large models on time-series data is challenging due to (1) the absence a large and cohesive public time-series repository, and (2) diverse time-series characteristics which make multi-dataset training onerous. Additionally, (3) experimental benchmarks to evaluate these models especially in scenarios with limited resources, time, and supervision, are still in its nascent stages. To address these challenges, we compile a large and diverse collection of public time-series, called the Time-series Pile, and systematically tackle time-series-specific challenges to unlock large-scale multi-dataset pre-training. Finally, we build on recent work to design a benchmark to evaluate time-series foundation models on diverse tasks and datasets in limited supervision settings. Experiments on this benchmark demonstrate the effectiveness of our pre-trained models with minimal data and task-specific fine-tuning. Finally, we present several interesting empirical observations about large pre-trained time-series models.
 
-## Usage
+## 🧑‍💻 Usage
 
 Install the package using:
 ```bash
@@ -69,7 +73,7 @@ model = MOMENTPipeline.from_pretrained(
 )
 ```
 
-## Tutorials
+## 🧑‍🏫 Tutorials
 
 <!-- We provide tutorials to demonstrate how to use and fine-tune our pre-trained model on various tasks. -->
 Here is the list of tutorials to get started with MOMENT for various tasks:
@@ -90,13 +94,14 @@ Here is the list of tutorials to get started with MOMENT for various tasks:
 }
 ```
 
-## Research Code
+
+## ⛑️ Research Code
 We designed this codebase to be extremely lightweight, and in the process removed a lot of code! We are working on releasing (complete but messier) research code, which will include code to handly different datasets, and scripts for pre-training, fine-tuning and evaluating MOMENT alongside other baselines. An early version of this code is available on [Anonymous Github](https://anonymous.4open.science/r/BETT-773F/README.md).
 
-## Contributions
+## ➕ Contributions
 We encourage researchers to contribute their methods and datasets to MOMENT. We are actively working on contributing guidelines. Stay tuned for updates!
 
-## Coverage
+## 📰 Coverage
 - [Moment: A Family of Open Time-Series Foundation Models](https://ai.plainenglish.io/moment-a-family-of-open-time-series-foundation-models-80f5135ca35b), Medium post by Samuel Chazy
 - [MOMENT: A Foundation Model for Time Series Forecasting, Classification, Anomaly Detection](https://towardsdatascience.com/moment-a-foundation-model-for-time-series-forecasting-classification-anomaly-detection-1e35f5b6ca76), Towards Datascience by Nikos Kafritsas
 - [CMU Researchers Propose MOMENT: A Family of Open-Source Machine Learning Foundation Models for General-Purpose Time Series Analysis](https://www.marktechpost.com/2024/05/15/cmu-researchers-propose-moment-a-family-of-open-source-machine-learning-foundation-models-for-general-purpose-time-series-analysis/), MarketTechPost article by Mohammad Asjad
@@ -104,7 +109,17 @@ We encourage researchers to contribute their methods and datasets to MOMENT. We 
 Dr. Tehseen Zia
 - [Time Series AI: MOMENT Model](https://www.youtube.com/watch?v=D87XbbdB11M), Webinar hosted by [Gradient AI](https://gradient.ai/)
 
-## License
+
+## 🤟 Contemporary Work
+There's a lot of cool work on building time series forecasting foundation models! Here's an incomplete list:
+- TimeGPT-1 by [Nixtla](https://www.nixtla.io/), [[Paper](https://arxiv.org/abs/2310.03589), [API](https://github.com/Nixtla/nixtla)]
+- Lag-Llama: Towards Foundation Models for Probabilistic Time Series Forecasting by Morgan Stanley and ServiceNow Research, [[Paper](https://arxiv.org/abs/2310.08278), [Code](https://github.com/time-series-foundation-models/lag-llama), [Hugging Face](https://huggingface.co/time-series-foundation-models/Lag-Llama)]
+- Tiny Time Mixers (TTMs): Fast Pre-trained Models for Enhanced Zero/Few-Shot Forecasting of Multivariate Time Series by IBM, [[Paper](https://arxiv.org/abs/2401.03955), [Hugging Face](https://huggingface.co/ibm-granite/granite-timeseries-ttm-v1)]
+- Moirai: A Time Series Foundation Model for Universal Forecasting [[Paper](https://arxiv.org/abs/2402.02592), [Code](https://github.com/SalesforceAIResearch/uni2ts), [Hugging Face](https://huggingface.co/Salesforce/moirai-1.0-R-large)]
+- Chronos: Learning the Language of Time Series by Amazon, [[Paper](https://arxiv.org/abs/2403.07815), [Code](https://github.com/amazon-science/chronos-forecasting), [Hugging Face](https://huggingface.co/collections/amazon/chronos-models-65f1791d630a8d57cb718444)]
+- TOTEM: TOkenized Time Series EMbeddings for General Time Series Analysis [[Paper](https://arxiv.org/abs/2402.16412), [Code](https://github.com/SaberaTalukder/TOTEM)]
+
+## 🪪 License
 
 MIT License
 
