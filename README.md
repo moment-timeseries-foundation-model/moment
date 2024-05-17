@@ -10,23 +10,50 @@
 ## 🔥 News
 - MOMENT was accepted at ICML 2024!
 - We are working on releasing the MOMENT research code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)! Stay tuned for updates!
+- Interested in multimodal time series & text foundation models? Check out our preliminary work on JoLT (**Jo**intly **L**earned Represenations for **T**ime series & **T**ext) [[AAAI 2024 Student Abstract](https://ojs.aaai.org/index.php/AAAI/article/view/30423), [NeurIPS 2023 DGM4H Workshop](https://openreview.net/forum?id=UVF1AMBj9u)]. JoLT won the best student abstract presentation at AAAI! Stay tuned for multimodal time series & text foundation models!
 
 ## 📖 Introduction
 We introduce MOMENT, a family of open-source foundation models for general-purpose time-series analysis. Pre-training large models on time-series data is challenging due to (1) the absence a large and cohesive public time-series repository, and (2) diverse time-series characteristics which make multi-dataset training onerous. Additionally, (3) experimental benchmarks to evaluate these models especially in scenarios with limited resources, time, and supervision, are still in its nascent stages. To address these challenges, we compile a large and diverse collection of public time-series, called the Time-series Pile, and systematically tackle time-series-specific challenges to unlock large-scale multi-dataset pre-training. Finally, we build on recent work to design a benchmark to evaluate time-series foundation models on diverse tasks and datasets in limited supervision settings. Experiments on this benchmark demonstrate the effectiveness of our pre-trained models with minimal data and task-specific fine-tuning. Finally, we present several interesting empirical observations about large pre-trained time-series models.
 
-### MOMENT: One Model, Many Time Series Tasks, Less SupervisiondMOMENT can solve multiple time series analysis tasks well in settings with limited supervision, for example zero-shot anomaly detection and imputation, and unsupervised represenation learning for classification!
+### MOMENT: One Model, Multiple Tasks, Datasets & Domains
 
 <div align="center">
-    <img src="assets/moment_comparison .png" width="40%">
+<img width="60%" alt="MOMENT: One Model, Multiple Tasks, Datasets & Domains" src="https://github.com/moment-timeseries-foundation-model/moment/assets/26150479/90c7d055-36d2-42aa-92b1-c5cfade22b3e">
 </div>
 
-### MOMENT Architecture in a Nutshell
+MOMENT on different datasets and tasks, without any parameter updates:
+- _Imputation:_ Better than statistical imputation baselines
+- _Anomaly Detection:_ Second best $F_1$ than all baselines
+- _Classification:_ More accurate than 11 / 16 compared methods1
+- _Short-horizon Forecasting:_ Better than ARIMA on some datasets
+
+By linear probing (fine-tuning the final linear layer): 
+- _Imputation:_ Better than baselines on 4 / 6 datasets
+- _Anomaly Detection:_ Best $F_1$
+- _Long-horizon Forecasting:_ Competitive in some settings
+
+### MOMENT Captures the Language of Time Series
+Principal components of the embeddings of synthetically generated sinusoids suggest that MOMENT can capture subtle trend, scale, frequency, and phase information. In each experiment, $c$ controls the factor of interest, for example the power of the trend polynomial $c \in [\frac{1}{8}, 8) (Oreshkin et al., 2020). We generate multiple sine waves by varying $c$, derive their sequence-level representations using MOMENT, and visualize them in a 2-dimensional space using PCA.
+
+<div align="center">
+<img width="60%" alt="MOMENT Captures the Language of Time Series" src="https://github.com/moment-timeseries-foundation-model/moment/assets/26150479/fce67d3e-84ff-4219-bef2-9079162c4c9b">
+</div>
+
+### MOMENT Learns Meaningful Representation of Data
+PCA visualizations of representations learned by MOMENT on the [ECG500](https://paperswithcode.com/dataset/ecg5000) dataset in UCR Classification Archive. Here different colors represent different classes. Even without dataset-specific fine-tuning, MOMENT learns distinct representations for different classes.
+
+<div align="center">
+<img width="60%" alt="MOMENT Learns Meaningful Representation of Data" src="https://github.com/moment-timeseries-foundation-model/moment/assets/26150479/cb7b5233-a215-4287-8576-9625f002c1ff">
+</div>
+
+### Architecture in a Nutshell
 
 A time series is broken into disjoint fixed-length sub-sequences called patches, and each patch is mapped into a D-dimensional patch embedding. During pre-training, we mask patches uniformly at random by replacing their patch embeddings using a special mask embedding `[MASK]`. The goal of pre-training is to learn patch embeddings which can be used to reconstruct the input time series using a light-weight reconstruction head.
 
 <div align="center">
     <img src="assets/moment_architecture.png" width="60%">
 </div>
+
 
 
 
@@ -88,7 +115,6 @@ model = MOMENTPipeline.from_pretrained(
     model_kwargs={'task_name': 'embedding'},
 )
 ```
-
 
 ## 🧑‍🏫 Tutorials
 
