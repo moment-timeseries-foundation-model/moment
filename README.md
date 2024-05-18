@@ -103,7 +103,7 @@ model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
     model_kwargs={"task_name": "reconstruction"},
 )
-mode.init()
+model.init()
 ```
 
 **Representation Learning**
@@ -114,6 +114,7 @@ model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
     model_kwargs={'task_name': 'embedding'},
 )
+model.init()
 ```
 
 ## 🧑‍🏫 Tutorials
