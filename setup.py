@@ -4,7 +4,7 @@ with open("requirements.txt") as f:
     required = f.read().splitlines()
 
 setup(
-    name="moment",
+    name="momentfm",
     version="0.1",
     description="MOMENT: A Family of Open Time-series Foundation Models",
     author="Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski",
