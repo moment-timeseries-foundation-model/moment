@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-from moment.utils.data import load_from_tsfile
+from momentfm.utils.data import load_from_tsfile
 
 
 class ClassificationDataset:

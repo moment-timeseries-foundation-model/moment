@@ -3,7 +3,7 @@ from typing import Tuple
 import torch
 from torch import nn
 
-from moment.utils.utils import control_randomness
+from momentfm.utils.utils import control_randomness
 
 
 class SyntheticDataset(nn.Module):

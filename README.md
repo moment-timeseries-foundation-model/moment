@@ -68,7 +68,7 @@ To load the pre-trained model for one of the tasks, use one of the following cod
 
 **Forecasting**
 ```python
-from moment import MOMENTPipeline
+from momentfm import MOMENTPipeline
 
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
@@ -82,7 +82,7 @@ model.init()
 
 **Classification**
 ```python
-from moment import MOMENTPipeline
+from momentfm import MOMENTPipeline
 
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
@@ -97,7 +97,7 @@ model.init()
 
 **Anomaly Detection, Imputation, and Pre-training**
 ```python
-from moment import MOMENTPipeline
+from momentfm import MOMENTPipeline
 
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
@@ -108,7 +108,7 @@ mode.init()
 
 **Representation Learning**
 ```python
-from moment import MOMENTPipeline
+from momentfm import MOMENTPipeline
 
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
