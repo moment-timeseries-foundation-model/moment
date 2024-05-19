@@ -73,8 +73,8 @@ from momentfm import MOMENTPipeline
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
     model_kwargs={
-        'task_name': 'forecasting',
-        'forecast_horizon': 96
+        "task_name": "forecasting",
+        "forecast_horizon": 96
     },
 )
 model.init()
@@ -87,9 +87,9 @@ from momentfm import MOMENTPipeline
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
     model_kwargs={
-        'task_name': 'classification',
-        'n_channels': 1,
-        'num_class': 2
+        "task_name": "classification",
+        "n_channels": 1,
+        "num_class": 2
     },
 )
 model.init()
@@ -103,7 +103,7 @@ model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
     model_kwargs={"task_name": "reconstruction"},
 )
-mode.init()
+model.init()
 ```
 
 **Representation Learning**
@@ -112,8 +112,9 @@ from momentfm import MOMENTPipeline
 
 model = MOMENTPipeline.from_pretrained(
     "AutonLab/MOMENT-1-large", 
-    model_kwargs={'task_name': 'embedding'},
+    model_kwargs={"task_name": "embedding"},
 )
+model.init()
 ```
 
 ## 🧑‍🏫 Tutorials
