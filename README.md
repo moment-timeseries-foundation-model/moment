@@ -24,7 +24,7 @@ We introduce MOMENT, a family of open-source foundation models for general-purpo
 MOMENT on different datasets and tasks, without any parameter updates:
 - _Imputation:_ Better than statistical imputation baselines
 - _Anomaly Detection:_ Second best $F_1$ than all baselines
-- _Classification:_ More accurate than 11 / 16 compared methods1
+- _Classification:_ More accurate than 11 / 16 compared methods
 - _Short-horizon Forecasting:_ Better than ARIMA on some datasets
 
 By linear probing (fine-tuning the final linear layer): 
@@ -54,10 +54,9 @@ A time series is broken into disjoint fixed-length sub-sequences called patches,
     <img src="assets/moment_architecture.png" width="60%">
 </div>
 
-
-
-
 ## 🧑‍💻 Usage
+
+**Recommended Python Version:** Python 3.10 (support for additional versions is expected soon).
 
 Install the package using:
 ```bash
