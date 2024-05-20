@@ -58,7 +58,7 @@ A time series is broken into disjoint fixed-length sub-sequences called patches,
 
 ## 🧑‍💻 Usage
 
-**Recommended Python Version:** Python 3.10 (support for additional versions is expected soon).
+**Recommended Python Version:** Python 3.11 (support for additional versions is expected soon).
 
 Install the package using:
 ```bash
