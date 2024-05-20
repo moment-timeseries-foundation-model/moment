@@ -121,7 +121,7 @@ class MOMENT(nn.Module):
         self.freeze_encoder = config.getattr("freeze_encoder", True)
         self.freeze_head = config.getattr("freeze_head", False)
 
-        if self.patch_embedder:
+        if self.freeze_embedder:
             self.patch_embedding = freeze_parameters(self.patch_embedding)
         if self.freeze_encoder:
             self.encoder = freeze_parameters(self.encoder)
