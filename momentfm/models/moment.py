@@ -116,6 +116,18 @@ class MOMENT(nn.Module):
         self.encoder = self._get_transformer_backbone(config)
         self.head = self._get_head(self.task_name)
 
+        # Frozen parameters
+        self.freeze_embedder = config.getattr("freeze_embedder", True)
+        self.freeze_encoder = config.getattr("freeze_encoder", True)
+        self.freeze_head = config.getattr("freeze_head", False)
+
+        if self.patch_embedder:
+            self.patch_embedding = freeze_parameters(self.patch_embedding)
+        if self.freeze_encoder:
+            self.encoder = freeze_parameters(self.encoder)
+        if self.freeze_head:
+            self.head = freeze_parameters(self.head)
+
     def _update_inputs(
         self, config: Namespace | dict, **kwargs: dict
     ) -> NamespaceWithDefaults:
@@ -571,3 +583,13 @@ class MOMENTPipeline(MOMENT, PyTorchModelHubMixin):
         if self.new_task_name != TASKS.RECONSTRUCTION:
             self.task_name = self.new_task_name
             self.head = self._get_head(self.new_task_name)
+
+def freeze_parameters(model):
+    """
+    Freeze parameters of the model
+    """
+    # Freeze the parameters
+    for name, param in model.named_parameters():
+        param.requires_grad = False
+
+    return model
