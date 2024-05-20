@@ -117,7 +117,7 @@ class MOMENT(nn.Module):
         self.head = self._get_head(self.task_name)
 
         # Frozen parameters
-        self.patch_embedder = config.getattr("patch_embedder", True)
+        self.freeze_embedder = config.getattr("freeze_embedder", True)
         self.freeze_encoder = config.getattr("freeze_encoder", True)
         self.freeze_head = config.getattr("freeze_head", False)
 
