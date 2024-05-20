@@ -4,7 +4,9 @@
 [![preprint](https://img.shields.io/static/v1?label=arXiv&message=2402.03885&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2402.03885)
 [![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-FFD21E)](https://huggingface.co/AutonLab/MOMENT-1-large)
 [![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-FFD21E)](https://huggingface.co/datasets/AutonLab/Timeseries-PILE)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/license/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue)](https://opensource.org/license/MIT)
+[![Python: 3.11](https://img.shields.io/badge/Python-3.11-blue)]()
+
 </div>
 
 ## 🔥 News
