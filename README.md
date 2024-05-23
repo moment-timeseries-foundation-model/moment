@@ -42,7 +42,7 @@ Principal components of the embeddings of synthetically generated sinusoids sugg
 </div>
 
 ### MOMENT Learns Meaningful Representation of Data
-PCA visualizations of representations learned by MOMENT on the [ECG500](https://paperswithcode.com/dataset/ecg5000) dataset in UCR Classification Archive. Here different colors represent different classes. Even without dataset-specific fine-tuning, MOMENT learns distinct representations for different classes.
+PCA visualizations of representations learned by MOMENT on the [ECG5000](https://paperswithcode.com/dataset/ecg5000) dataset in UCR Classification Archive. Here different colors represent different classes. Even without dataset-specific fine-tuning, MOMENT learns distinct representations for different classes.
 
 <div align="center">
 <img width="60%" alt="MOMENT Learns Meaningful Representation of Data" src="https://github.com/moment-timeseries-foundation-model/moment/assets/26150479/cb7b5233-a215-4287-8576-9625f002c1ff">
