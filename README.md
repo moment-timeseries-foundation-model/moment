@@ -1,5 +1,5 @@
 <div align="center">
-<img width="60%" alt="MOMENT" src="assets/MOMENT Logo.jpeg">
+<img width="60%" alt="MOMENT" src="assets/MOMENT Logo.png">
 <h1>MOMENT: A Family of Open Time-series Foundation Models</h1>
 
 [![preprint](https://img.shields.io/static/v1?label=arXiv&message=2402.03885&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2402.03885)
