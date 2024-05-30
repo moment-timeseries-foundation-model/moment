@@ -58,10 +58,16 @@ class ClassificationHead(nn.Module):
         d_model: int = 768,
         n_classes: int = 2,
         head_dropout: int = 0.1,
+        reduction: str = "concat",
     ):
         super().__init__()
         self.dropout = nn.Dropout(head_dropout)
-        self.linear = nn.Linear(n_channels * d_model, n_classes)
+        if reduction == "mean":
+            self.linear = nn.Linear(d_model, n_classes)
+        elif reduction == "concat":
+            self.linear = nn.Linear(n_channels * d_model, n_classes)
+        else:
+            raise ValueError(f"Reduction method {reduction} not implemented. Only 'mean' and 'concat' are supported.")
 
     def forward(self, x, input_mask: torch.Tensor = None):
         x = torch.mean(x, dim=1)
@@ -179,6 +185,7 @@ class MOMENT(nn.Module):
                 self.config.d_model,
                 self.config.num_class,
                 self.config.getattr("dropout", 0.1),
+                reduction = self.config.getattr("reduction", "concat"),
             )
         elif task_name == TASKS.FORECASTING:
             num_patches = (
@@ -488,7 +495,7 @@ class MOMENT(nn.Module):
         self,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
-        reduction: str = "mean",
+        reduction: str = "concat",
         **kwargs,
     ) -> TimeseriesOutputs:
         batch_size, n_channels, seq_len = x_enc.shape
@@ -519,9 +526,16 @@ class MOMENT(nn.Module):
         enc_out = enc_out.reshape((-1, n_channels, n_patches, self.config.d_model))
         # [batch_size x n_channels x n_patches x d_model]
 
+        # Mean across channels
         if reduction == "mean":
-            enc_out = enc_out.mean(dim=1, keepdim=False)  # Mean across channels
             # [batch_size x n_patches x d_model]
+            enc_out = enc_out.mean(dim=1, keepdim=False)  
+        # Concatenate across channels
+        elif reduction == "concat":
+            # [batch_size x n_patches x d_model * n_channels]
+            enc_out = enc_out.permute(0, 2, 3, 1).reshape(
+                batch_size, n_patches, self.config.d_model * n_channels)
+
         else:
             raise NotImplementedError(f"Reduction method {reduction} not implemented.")
 
