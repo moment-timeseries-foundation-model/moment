@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "momentfm"
+version = "0.1"
+dependencies = [
+  "huggingface-hub==0.19.4",
+  "numpy==1.25.2",
+  "torch~=2.0",              # package was tested on 2.0.1
+  "transformers==4.33.3",
+]
+
+requires-python = ">=3.10"
+
+authors = [
+  {name = "Mononito Goswami", email = "mononitog@hotmail.com"},
+  {name = "Konrad Szafer", email = ""},
+  {name = "Arjun Choudhry"},
+  {name = "Yifu Cai"},
+]
+
+maintainers = [
+  {name = "Mononito Goswami", email = "mononitog@hotmail.com"},
+  {name = "Konrad Szafer", email = ""},
+]
+
+description = "MOMENT: A Family of Open Time Series Foundation Models"
+readme = "README.md"
+license = {file = "LICENSE"}
+
+keywords = [
+    "time series", 
+    "forecasting", 
+    "classification",
+    "imputation", 
+    "anomaly detection",  
+    "transformers", 
+    "pytorch", 
+    "huggingface", 
+    "moment",
+    "foundation models",
+    "large language models",
+    ]
+
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://moment-timeseries-foundation-model.github.io/"
+Repository = "https://github.com/moment-timeseries-foundation-model/moment"
+"Bug Tracker" = "https://github.com/moment-timeseries-foundation-model/moment/issues"
