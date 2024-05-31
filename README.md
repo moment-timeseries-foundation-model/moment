@@ -122,12 +122,14 @@ model.init()
 ## 🧑‍🏫 Tutorials
 
 <!-- We provide tutorials to demonstrate how to use and fine-tune our pre-trained model on various tasks. -->
-Here is the list of tutorials to get started with MOMENT for various tasks:
+Here is the list of tutorials and reproducibile experiments to get started with MOMENT for various tasks:
 - [Forecasting](./tutorials/forecasting.ipynb)
 - [Classification](./tutorials/classification.ipynb)
 - [Anomaly Detection](./tutorials/anomaly_detection.ipynb)
 - [Imputation](./tutorials/imputation.ipynb)
 - [Representation Learning](./tutorials/representation_learning.ipynb)
+
+All these experiments can be reproduced on a single NVIDIA A6000 GPU with 48 GiB RAM.
 
 > [!TIP]
 > Have more questions about using MOMENT? Checkout [Frequently Asked Questions](https://docs.google.com/document/d/18P3-ghnFXO57Wyvg6IuMNOzDyHpR0RxQlkvBWig2DiI/edit?usp=sharing), and you might find your answer!
