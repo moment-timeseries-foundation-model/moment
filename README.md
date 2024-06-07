@@ -11,6 +11,7 @@
 </div>
 
 ## 🔥 News
+- We fixed an issue with Classification where MOMENT was unable to handle multi-channel inputs. 
 - MOMENT was accepted at ICML 2024!
 - We are working on releasing the MOMENT research code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)! Stay tuned for updates!
 - Interested in multimodal time series & text foundation models? Check out our preliminary work on JoLT (**Jo**intly **L**earned Represenations for **T**ime series & **T**ext) [[AAAI 2024 Student Abstract](https://ojs.aaai.org/index.php/AAAI/article/view/30423), [NeurIPS 2023 DGM4H Workshop](https://openreview.net/forum?id=UVF1AMBj9u)]. JoLT won the best student abstract presentation at AAAI! Stay tuned for multimodal time series & text foundation models!
