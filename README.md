@@ -62,9 +62,13 @@ A time series is broken into disjoint fixed-length sub-sequences called patches,
 
 **Recommended Python Version:** Python 3.11 (support for additional versions is expected soon).
 
-Install the package using:
+You can install the `momentfm` package using pip:
 ```bash
-pip install git+https://github.com/moment-timeseries-foundation-model/moment.git
+pip install momentfm
+```
+Alternatively, to install the latest version directly from the GitHub repository:
+```bash
+pip install git+https://github.com/mononitogoswami/MOMENT.git
 ```
 
 To load the pre-trained model for one of the tasks, use one of the following code snippets:
