@@ -11,9 +11,9 @@
 </div>
 
 ## 🔥 News
+- 🔥🔥🔥 We released [MOMENT research](https://github.com/moment-timeseries-foundation-model/moment-research) code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)!
 - We fixed an issue with Classification where MOMENT was unable to handle multi-channel inputs. 
 - MOMENT was accepted at ICML 2024!
-- We are working on releasing the MOMENT research code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)! Stay tuned for updates!
 - Interested in multimodal time series & text foundation models? Check out our preliminary work on JoLT (**Jo**intly **L**earned Represenations for **T**ime series & **T**ext) [[AAAI 2024 Student Abstract](https://ojs.aaai.org/index.php/AAAI/article/view/30423), [NeurIPS 2023 DGM4H Workshop](https://openreview.net/forum?id=UVF1AMBj9u)]. JoLT won the best student abstract presentation at AAAI! Stay tuned for multimodal time series & text foundation models!
 
 ## 📖 Introduction
@@ -152,7 +152,7 @@ All these experiments can be reproduced on a single NVIDIA A6000 GPU with 48 GiB
 
 
 ## ⛑️ Research Code
-We designed this codebase to be extremely lightweight, and in the process removed a lot of code! We are working on releasing (complete but messier) research code, which will include code to handly different datasets, and scripts for pre-training, fine-tuning and evaluating MOMENT alongside other baselines. An early version of this code is available on [Anonymous Github](https://anonymous.4open.science/r/BETT-773F/README.md).
+We designed this codebase to be extremely lightweight, and in the process removed a lot of code! We released the complete but messier research code [here](https://github.com/moment-timeseries-foundation-model/moment-research). This includes code to handle different datasets, and scripts for pre-training, fine-tuning and evaluating MOMENT alongside other baselines. An early version of this code was available on [Anonymous Github](https://anonymous.4open.science/r/BETT-773F/README.md).
 
 ## ➕ Contributions
 We encourage researchers to contribute their methods and datasets to MOMENT. We are actively working on contributing guidelines. Stay tuned for updates!
