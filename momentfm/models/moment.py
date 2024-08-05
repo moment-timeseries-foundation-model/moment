@@ -147,9 +147,7 @@ class MOMENT(nn.Module):
             config.d_model is None
             and config.transformer_backbone in SUPPORTED_HUGGINGFACE_MODELS
         ):
-            config.d_model = get_huggingface_model_dimensions(
-                config.transformer_backbone
-            )
+            config.d_model = config.t5_config['d_model']
             logging.info(f"Setting d_model to {config.d_model}")
         elif config.d_model is None:
             raise ValueError(
@@ -203,16 +201,14 @@ class MOMENT(nn.Module):
             raise NotImplementedError(f"Task {task_name} not implemented.")
 
     def _get_transformer_backbone(self, config) -> nn.Module:
+        model_config = T5Config.from_dict(config.t5_config)
         if config.getattr("randomly_initialize_backbone", False):
-            model_config = T5Config.from_pretrained(config.transformer_backbone)
             transformer_backbone = T5Model(model_config)
             logging.info(
                 f"Initializing randomly initialized transformer from {config.transformer_backbone}."
             )
         else:
-            transformer_backbone = T5EncoderModel.from_pretrained(
-                config.transformer_backbone
-            )
+            transformer_backbone = T5EncoderModel(model_config)
             logging.info(
                 f"Initializing pre-trained transformer from {config.transformer_backbone}."
             )
