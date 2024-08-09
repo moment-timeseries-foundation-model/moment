@@ -1,4 +1,4 @@
-huggingface-hub==0.19.4
+huggingface-hub==0.24.0
 numpy==1.25.2
 torch==2.0.1
 transformers==4.33.3
