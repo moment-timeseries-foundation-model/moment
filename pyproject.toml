@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "momentfm"
-version = "0.1"
+version = "0.1.1"
 dependencies = [
   "huggingface-hub==0.24.0",
   "numpy==1.25.2",

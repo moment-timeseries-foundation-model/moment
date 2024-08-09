@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="momentfm",
-    version="0.1",
+    version="0.1.1",
     description="MOMENT: A Family of Open Time-series Foundation Models",
     author="Mononito Goswami, Konrad Szafer, Arjun Choudhry, Yifu Cai, Shuo Li, Artur Dubrawski",
     author_email="mgoswami@andrew.cmu.edu",
