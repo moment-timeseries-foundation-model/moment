@@ -164,6 +164,7 @@ We encourage researchers to contribute their methods and datasets to MOMENT. We 
 - [ARTIFICIAL INTELLIGENCEThe Rise of Time-Series Foundation Models for Data Analysis and Forecasting](https://www.unite.ai/the-rise-of-time-series-foundation-models-for-data-analysis-and-forecasting/), Unite AI blog by 
 Dr. Tehseen Zia
 - [Time Series AI: MOMENT Model](https://www.youtube.com/watch?v=D87XbbdB11M), Webinar hosted by [Gradient AI](https://gradient.ai/)
+- [Forecasting Impact, Panel on Foundational Models with Azul Garza Ramírez](https://www.buzzsprout.com/1641538/15433744-panel-on-foundational-models-with-azul-garza-ramirez-and-mononito-goswami-part-1), Podcast hosted by Mariana Menchero and Faranak Golestaneh on behalf of the [International Institute of Forecasters](https://forecasters.org/publications/forecasting-impact-podcast/)
 
 
 ## 🤟 Contemporary Work
@@ -174,6 +175,7 @@ There's a lot of cool work on building time series forecasting foundation models
 - Moirai: A Time Series Foundation Model for Universal Forecasting [[Paper](https://arxiv.org/abs/2402.02592), [Code](https://github.com/SalesforceAIResearch/uni2ts), [Hugging Face](https://huggingface.co/Salesforce/moirai-1.0-R-large)]
 - A decoder-only foundation model for time-series forecasting by Google, [[Paper](https://arxiv.org/abs/2310.10688), [Code](https://github.com/google-research/timesfm), [Hugging Face](https://huggingface.co/google/timesfm-1.0-200m)]
 - Chronos: Learning the Language of Time Series by Amazon, [[Paper](https://arxiv.org/abs/2403.07815), [Code](https://github.com/amazon-science/chronos-forecasting), [Hugging Face](https://huggingface.co/collections/amazon/chronos-models-65f1791d630a8d57cb718444)]
+- Timer: Generative Pre-trained Transformers Are Large Time Series Models by THUML @ Tsinghua University, [[Paper](https://arxiv.org/abs/2402.02368), [Code](https://github.com/thuml/Large-Time-Series-Model?tab=readme-ov-file)]
 
 There's also some recent work on solving multiple time series modeling tasks in addition to forecasting: 
 - TOTEM: TOkenized Time Series EMbeddings for General Time Series Analysis [[Paper](https://arxiv.org/abs/2402.16412), [Code](https://github.com/SaberaTalukder/TOTEM)]
