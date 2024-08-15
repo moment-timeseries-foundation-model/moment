@@ -135,6 +135,8 @@ Here is the list of tutorials and reproducibile experiments to get started with 
 - [Representation Learning](./tutorials/representation_learning.ipynb)
 - [Real-world Electrocardiogram (ECG) Case Study](./tutorials/ptbxl_classification.ipynb) -- This tutorial also shows how to fine-tune MOMENT for a real-world ECG classification problem, performing training and inference on multiple GPUs and parameter efficient fine-tuning (PEFT). 
 
+Special thanks to [Yifu Cai](https://github.com/raycai420) and [Arjun Choudhry](https://github.com/Arjun7m) for the tutorials!
+
 All these experiments can be reproduced on a single NVIDIA A6000 GPU with 48 GiB RAM.
 
 > [!TIP]
