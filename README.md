@@ -37,7 +37,7 @@ By linear probing (fine-tuning the final linear layer):
 - _Long-horizon Forecasting:_ Competitive in some settings
 
 ### MOMENT Captures the Language of Time Series
-Principal components of the embeddings of synthetically generated sinusoids suggest that MOMENT can capture subtle trend, scale, frequency, and phase information. In each experiment, $c$ controls the factor of interest, for example the power of the trend polynomial $c \in [\frac{1}{8}, 8) (Oreshkin et al., 2020). We generate multiple sine waves by varying $c$, derive their sequence-level representations using MOMENT, and visualize them in a 2-dimensional space using PCA.
+Principal components of the embeddings of synthetically generated sinusoids suggest that MOMENT can capture subtle trend, scale, frequency, and phase information. In each experiment, $c$ controls the factor of interest, for example the power of the trend polynomial $c \in [\frac{1}{8}, 8)$ (Oreshkin et al., 2020). We generate multiple sine waves by varying $c$, derive their sequence-level representations using MOMENT, and visualize them in a 2-dimensional space using PCA.
 
 <div align="center">
 <img width="60%" alt="MOMENT Captures the Language of Time Series" src="https://github.com/moment-timeseries-foundation-model/moment/assets/26150479/fce67d3e-84ff-4219-bef2-9079162c4c9b">
