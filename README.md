@@ -133,6 +133,7 @@ Here is the list of tutorials and reproducibile experiments to get started with 
 - [Anomaly Detection](./tutorials/anomaly_detection.ipynb)
 - [Imputation](./tutorials/imputation.ipynb)
 - [Representation Learning](./tutorials/representation_learning.ipynb)
+- [Real-world Electrocardiogram (ECG) Case Study](./tutorials/ptbxl_classification.ipynb) -- This tutorial also shows how to fine-tune MOMENT for a real-world ECG classification problem, performing training and inference on multiple GPUs and parameter efficient fine-tuning (PEFT). 
 
 All these experiments can be reproduced on a single NVIDIA A6000 GPU with 48 GiB RAM.
 
