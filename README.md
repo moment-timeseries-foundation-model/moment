@@ -68,7 +68,7 @@ pip install momentfm
 ```
 Alternatively, to install the latest version directly from the GitHub repository:
 ```bash
-pip install git+https://github.com/mononitogoswami/MOMENT.git
+pip install git+https://github.com/moment-timeseries-foundation-model/moment.git
 ```
 
 To load the pre-trained model for one of the tasks, use one of the following code snippets:
