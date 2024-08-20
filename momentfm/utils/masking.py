@@ -89,7 +89,7 @@ class Masking:
             ids_shuffle, dim=1
         )  # ids_restore: [batch_size x n_patches]
 
-        # Generate the binary mask: 0 is keep, 1 is remove
+        # Generate the binary mask: 0 is remove, 1 is keep
         mask = torch.zeros(
             [batch_size, n_patches], device=x.device
         )  # mask: [batch_size x n_patches]
