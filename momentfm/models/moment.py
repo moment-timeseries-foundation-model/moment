@@ -113,7 +113,7 @@ class MOMENT(nn.Module):
             seq_len=config.seq_len,
             patch_len=config.patch_len,
             stride=config.patch_stride_len,
-            dropout=config.getattr("dropout", 0.1),
+            patch_dropout=config.getattr("patch_dropout", 0.1),
             add_positional_embedding=config.getattr("add_positional_embedding", True),
             value_embedding_bias=config.getattr("value_embedding_bias", False),
             orth_gain=config.getattr("orth_gain", 1.41),
@@ -174,7 +174,7 @@ class MOMENT(nn.Module):
             return PretrainHead(
                 self.config.d_model,
                 self.config.patch_len,
-                self.config.getattr("dropout", 0.1),
+                self.config.getattr("head_dropout", 0.1),
                 self.config.getattr("orth_gain", 1.41),
             )
         elif task_name == TASKS.CLASSIFICATION:
@@ -182,7 +182,7 @@ class MOMENT(nn.Module):
                 self.config.n_channels,
                 self.config.d_model,
                 self.config.num_class,
-                self.config.getattr("dropout", 0.1),
+                self.config.getattr("head_dropout", 0.1),
                 reduction = self.config.getattr("reduction", "concat"),
             )
         elif task_name == TASKS.FORECASTING:
