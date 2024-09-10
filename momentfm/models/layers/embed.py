@@ -131,7 +131,7 @@ class TimeFeatureEmbedding(nn.Module):
 
 class DataEmbedding(nn.Module):
     def __init__(
-        self, c_in, d_model, model_name, embed_type="fixed", freq="h", dropout=0.1
+        self, c_in, d_model, model_name, embed_type="fixed", freq="h", patch_dropout=0.1
     ):
         super(DataEmbedding, self).__init__()
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
@@ -143,7 +143,7 @@ class DataEmbedding(nn.Module):
             if embed_type != "timeF"
             else TimeFeatureEmbedding(d_model=d_model, embed_type=embed_type, freq=freq)
         )
-        self.dropout = nn.Dropout(p=dropout)
+        self.dropout = nn.Dropout(p=patch_dropout)
 
     def forward(self, x, x_mark=None):
         if x_mark is None:
@@ -158,7 +158,7 @@ class DataEmbedding(nn.Module):
 
 
 class DataEmbedding_wo_pos(nn.Module):
-    def __init__(self, c_in, d_model, embed_type="fixed", freq="h", dropout=0.1):
+    def __init__(self, c_in, d_model, embed_type="fixed", freq="h", patch_dropout=0.1):
         super(DataEmbedding_wo_pos, self).__init__()
 
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
@@ -168,7 +168,7 @@ class DataEmbedding_wo_pos(nn.Module):
             if embed_type != "timeF"
             else TimeFeatureEmbedding(d_model=d_model, embed_type=embed_type, freq=freq)
         )
-        self.dropout = nn.Dropout(p=dropout)
+        self.dropout = nn.Dropout(p=patch_dropout)
 
     def forward(self, x, x_mark):
         if x_mark is None:
@@ -185,7 +185,7 @@ class PatchEmbedding(nn.Module):
         seq_len: int = 512,
         patch_len: int = 8,
         stride: int = 8,
-        dropout: int = 0.1,
+        patch_dropout: int = 0.1,
         add_positional_embedding: bool = False,
         value_embedding_bias: bool = False,
         orth_gain: float = 1.41,
@@ -211,7 +211,7 @@ class PatchEmbedding(nn.Module):
             self.position_embedding = PositionalEmbedding(d_model)
 
         # Residual dropout
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout(patch_dropout)
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor = None) -> torch.Tensor:
         mask = Masking.convert_seq_to_patch_view(
