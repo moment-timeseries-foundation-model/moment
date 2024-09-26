@@ -170,6 +170,8 @@ class MOMENT(nn.Module):
         return config
 
     def _get_head(self, task_name: str) -> nn.Module:
+        if task_name != TASKS.RECONSTRUCTION:
+            warnings.warn("Only reconstruction head is pre-trained. Classification and forecasting heads must be fine-tuned.")
         if task_name == TASKS.RECONSTRUCTION:
             return PretrainHead(
                 self.config.d_model,
