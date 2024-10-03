@@ -108,7 +108,7 @@ class PTBXL_Trainer:
                 batch_x = batch_x.to(self.device).float()
                 # [batch_size x num_patches x d_model (=1024)]
                 with torch.autocast(device_type='cuda', dtype=torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float32):
-                    output = self.model(batch_x, reduction=self.args.reduction) 
+                    output = self.model(x_enc=batch_x, reduction=self.args.reduction) 
                 # mean over patches dimension, [batch_size x d_model]
                 embedding = output.embeddings.mean(dim=1)
                 embeddings.append(embedding.detach().cpu().numpy())
@@ -182,7 +182,7 @@ class PTBXL_Trainer:
             batch_labels = batch_labels.to(self.device)
 
             with torch.autocast(device_type='cuda', dtype=torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float32):
-                output = self.model(batch_x, reduction=self.args.reduction)
+                output = self.model(x_enc=batch_x, reduction=self.args.reduction)
                 loss = self.criterion(output.logits, batch_labels)
             loss.backward()
 
@@ -208,7 +208,7 @@ class PTBXL_Trainer:
             batch_labels = batch_labels.to(self.device)
 
             with torch.autocast(device_type='cuda', dtype=torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float32):
-                output = self.model(batch_x, reduction=self.args.reduction)
+                output = self.model(x_enc=batch_x, reduction=self.args.reduction)
                 loss = self.criterion(output.logits, batch_labels)
                 losses.append(loss.item())
             self.accelerator.backward(loss)
@@ -287,7 +287,7 @@ class PTBXL_Trainer:
                 batch_labels = batch_labels.to(self.device)
 
                 with torch.autocast(device_type='cuda', dtype=torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float32):
-                    output = self.model(batch_x)
+                    output = self.model(x_enc=batch_x)
                     loss = self.criterion(output.logits, batch_labels)
                 total_loss += loss.item()
                 total_correct += (output.logits.argmax(dim=1) == batch_labels).sum().item()
