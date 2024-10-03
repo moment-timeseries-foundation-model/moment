@@ -228,6 +228,7 @@ class MOMENT(nn.Module):
 
     def embed(
         self,
+        *,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         reduction: str = "mean",
@@ -279,6 +280,7 @@ class MOMENT(nn.Module):
 
     def reconstruction(
         self,
+        *,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         mask: torch.Tensor = None,
@@ -333,6 +335,7 @@ class MOMENT(nn.Module):
 
     def reconstruct(
         self,
+        *,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         mask: torch.Tensor = None,
@@ -391,6 +394,7 @@ class MOMENT(nn.Module):
 
     def detect_anomalies(
         self,
+        *,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         anomaly_criterion: str = "mse",
@@ -409,7 +413,11 @@ class MOMENT(nn.Module):
         )
 
     def forecast(
-        self, x_enc: torch.Tensor, input_mask: torch.Tensor = None, **kwargs
+        self,
+        *,
+        x_enc: torch.Tensor, 
+        input_mask: torch.Tensor = None, 
+        **kwargs
     ) -> TimeseriesOutputs:
         batch_size, n_channels, seq_len = x_enc.shape
 
@@ -438,6 +446,7 @@ class MOMENT(nn.Module):
 
     def short_forecast(
         self,
+        *, 
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         forecast_horizon: int = 1,
@@ -491,6 +500,7 @@ class MOMENT(nn.Module):
 
     def classify(
         self,
+        *,
         x_enc: torch.Tensor,
         input_mask: torch.Tensor = None,
         reduction: str = "concat",
@@ -543,9 +553,10 @@ class MOMENT(nn.Module):
 
     def forward(
         self,
+        *,
         x_enc: torch.Tensor,
-        mask: torch.Tensor = None,
         input_mask: torch.Tensor = None,
+        mask: torch.Tensor = None,
         **kwargs,
     ) -> TimeseriesOutputs:
         if input_mask is None:
