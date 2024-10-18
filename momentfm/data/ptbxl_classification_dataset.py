@@ -165,13 +165,16 @@ class PTBXL_dataset(Dataset):
         else:
             # Load path to the data and get dataframe with patient attributes, 
             # data path, labels and expert interpretations
-            paths_to_files = load_paths(config.basepath, fs=self.fs)
-            self.df = modify_df(config.basepath, output_type=self.output_type)
+            paths_to_files = load_paths(config.base_path, fs=self.fs)
+            self.df = modify_df(config.base_path, output_type=self.output_type)
 
             print("[INFO] Modified database")
             # Create a mapping between data files and the train, test, val split they belong to
-            phase_to_pids = json.load(open(config.path_to_pids))
-            self.phase_to_paths = obtain_phase_to_paths_dict(self.df, paths_to_files, phase_to_pids=phase_to_pids)
+            if getattr(config, "path_to_pids", None) and os.path.exists(config.path_to_pids):
+                phase_to_pids = json.load(open(config.path_to_pids))
+                self.phase_to_paths = obtain_phase_to_paths_dict(self.df, paths_to_files, phase_to_pids=phase_to_pids)
+            else:
+                self.phase_to_paths = obtain_phase_to_paths_dict(self.df, paths_to_files)
 
             print("[INFO] Extracted paths")
             self._texts, self._labels, self._ecg_ids = load_ptbxl_data(self.phase_to_paths, self.df, self.phase, self.output_type)
