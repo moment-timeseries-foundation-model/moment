@@ -234,6 +234,18 @@ class MOMENT(nn.Module):
         reduction: str = "mean",
         **kwargs,
     ) -> TimeseriesOutputs:
+        """
+        Embeds the input time series data into a latent representation using the model's encoder.
+    
+        Args:
+            x_enc (torch.Tensor): The input tensor of shape (batch_size, n_channels, seq_len).
+            input_mask (torch.Tensor, optional): A mask tensor of shape (batch_size, seq_len) indicating the valid input positions. Default is None, which means all positions are valid.
+            reduction (str, optional): The reduction method to apply on the output embeddings. Options are "mean" (default) or "none". The `mean` reduction averages embeddings over channels and patches. 
+            **kwargs: Additional keyword arguments.
+    
+        Returns:
+            TimeseriesOutputs: An object containing the embeddings, input mask, and metadata regarding the reduction method used.
+        """
         batch_size, n_channels, seq_len = x_enc.shape
 
         if input_mask is None:
