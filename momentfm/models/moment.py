@@ -271,6 +271,12 @@ class MOMENT(nn.Module):
             enc_out = (input_mask_patch_view * enc_out).sum(
                 dim=1
             ) / input_mask_patch_view.sum(dim=1)
+
+        elif reduction == "none":
+            input_mask_patch_view = input_mask_patch_view.unsqueeze(-1).repeat(
+                1, 1, 1, self.config.d_model
+            ) 
+            enc_out = input_mask_patch_view * enc_out
         else:
             raise NotImplementedError(f"Reduction method {reduction} not implemented.")
 
