@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "momentfm"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
   "huggingface-hub==0.24.0",
   "numpy==1.25.2",
@@ -16,7 +16,7 @@ requires-python = ">=3.10"
 
 authors = [
   {name = "Mononito Goswami", email = "mononitog@hotmail.com"},
-  {name = "Konrad Szafer", email = ""},
+  {name = "Konrad Szafer"},
   {name = "Arjun Choudhry"},
   {name = "Yifu Cai"},
 ]
@@ -25,6 +25,7 @@ maintainers = [
   {name = "Mononito Goswami", email = "mononitog@hotmail.com"},
   {name = "Konrad Szafer", email = "szafer.konrad@gmail.com"},
   {name = "Yifu Cai", email = "yifuc@andrew.cmu.edu"},
+  {name = "Michal Wilinski", email = "mwilisk@andrew.cmu.edu"},
 ]
 
 description = "MOMENT: A Family of Open Time Series Foundation Models"
