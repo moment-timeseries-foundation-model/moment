@@ -184,6 +184,9 @@ There's a lot of cool work on building time series forecasting foundation models
 There's also some recent work on solving multiple time series modeling tasks in addition to forecasting: 
 - TOTEM: TOkenized Time Series EMbeddings for General Time Series Analysis [[Paper](https://arxiv.org/abs/2402.16412), [Code](https://github.com/SaberaTalukder/TOTEM)]
 
+## Changelog
+- (03/18) Add no reduction (`none`) in embedding mode. 
+
 ## 🪪 License
 
 MIT License
