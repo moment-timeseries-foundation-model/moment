@@ -6,24 +6,52 @@ from typing import NamedTuple
 import numpy as np
 import torch
 
+SUPPORTED_HUGGINGFACE_MODELS = [
+    't5-small', 't5-base', 't5-large', 't5-3b', 't5-11b',
+    'google/flan-t5-small', 'google/flan-t5-base', 
+    'google/flan-t5-large', 'google/flan-t5-xl', 
+    'google/flan-t5-xxl',
+    'google/t5-efficient-tiny', 'google/t5-efficient-mini',
+    'google/t5-efficient-small', 'google/t5-efficient-medium',
+    'google/t5-efficient-large', 'google/t5-efficient-base',
+]
 
-class NamespaceWithDefaults(Namespace):
+# class NamespaceWithDefaults(Namespace):
+#     @classmethod
+#     def from_namespace(cls, namespace):
+#         new_instance = cls()
+#         for attr in dir(namespace):
+#             if not attr.startswith("__"):
+#                 setattr(new_instance, attr, getattr(namespace, attr))
+#         return new_instance
+
+#     def getattr(self, key, default=None):
+#         return getattr(self, key, default)
+
+class NamespaceWithDefaults(Namespace): # NEW: for converting dictionary
     @classmethod
     def from_namespace(cls, namespace):
         new_instance = cls()
-        for attr in dir(namespace):
-            if not attr.startswith("__"):
-                setattr(new_instance, attr, getattr(namespace, attr))
-        return new_instance
 
+        if isinstance(namespace, dict):
+            # Handle the case where namespace is a dictionary
+            for key, value in namespace.items():
+                setattr(new_instance, key, value)
+                
+        elif isinstance(namespace, Namespace):
+            # Handle the case where namespace is a Namespace object
+            for attr in dir(namespace):
+                if not attr.startswith('__'):
+                    setattr(new_instance, attr, getattr(namespace, attr))
+                    
+        return new_instance
+    
     def getattr(self, key, default=None):
         return getattr(self, key, default)
-
 
 def parse_config(config: dict) -> NamespaceWithDefaults:
     args = NamespaceWithDefaults(**config)
     return args
-
 
 def make_dir_if_not_exists(path, verbose=True):
     if not is_directory(path):
@@ -34,7 +62,6 @@ def make_dir_if_not_exists(path, verbose=True):
             print(f"Making directory: {path}...")
     return True
 
-
 def is_directory(path):
     extensions = [".pth", ".txt", ".json", ".yaml"]
 
@@ -42,7 +69,6 @@ def is_directory(path):
         if ext in path:
             return False
     return True
-
 
 def control_randomness(seed: int = 13):
     random.seed(seed)
@@ -52,7 +78,6 @@ def control_randomness(seed: int = 13):
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-
 
 def dtype_map(dtype: str):
     map = {
@@ -69,13 +94,38 @@ def dtype_map(dtype: str):
     }
     return map[dtype]
 
-
-def get_huggingface_model_dimensions(model_name: str = "flan-t5-base"):
+def get_huggingface_model_dimensions(model_name : str = "flan-t5-base"):
     from transformers import T5Config
-
     config = T5Config.from_pretrained(model_name)
     return config.d_model
 
+def _update_inputs(configs: Namespace | dict, **kwargs) -> NamespaceWithDefaults:
+    if isinstance(configs, dict) and 'model_kwargs' in kwargs:
+        return NamespaceWithDefaults(**{**configs, **kwargs['model_kwargs']})
+    else:
+        return NamespaceWithDefaults.from_namespace(configs)
+
+def _validate_inputs(configs: NamespaceWithDefaults) -> NamespaceWithDefaults:
+    if configs.transformer_backbone == "PatchTST" and configs.transformer_type != "encoder_only":
+        warnings.warn("PatchTST only supports encoder-only transformer backbones.")
+        configs.transformer_type = "encoder_only"
+    if configs.transformer_backbone != "PatchTST" and configs.transformer_backbone not in SUPPORTED_HUGGINGFACE_MODELS:
+        raise NotImplementedError(f"Transformer backbone {configs.transformer_backbone} not supported."
+                                    f"Please choose from {SUPPORTED_HUGGINGFACE_MODELS} or PatchTST.")
+    if configs.d_model is None and configs.transformer_backbone in SUPPORTED_HUGGINGFACE_MODELS: 
+        configs.d_model = get_huggingface_model_dimensions(configs.transformer_backbone)
+        logging.info("Setting d_model to {}".format(configs.d_model))
+    elif configs.d_model is None:
+        raise ValueError("d_model must be specified if transformer backbone \
+                            unless transformer backbone is a Huggingface model.")
+        
+    if configs.transformer_type not in ["encoder_only", "decoder_only", "encoder_decoder"]:
+        raise ValueError("transformer_type must be one of ['encoder_only', 'decoder_only', 'encoder_decoder']")
+
+    if configs.stride != configs.patch_len:
+        warnings.warn("Patch stride length is not equal to patch length.")
+
+    return configs
 
 def get_anomaly_criterion(anomaly_criterion: str = "mse"):
     if anomaly_criterion == "mse":
@@ -85,7 +135,6 @@ def get_anomaly_criterion(anomaly_criterion: str = "mse"):
     else:
         raise ValueError(f"Anomaly criterion {anomaly_criterion} not supported.")
 
-
 def _reduce(metric, reduction="mean", axis=None):
     if reduction == "mean":
         return np.nanmean(metric, axis=axis)
@@ -93,7 +142,6 @@ def _reduce(metric, reduction="mean", axis=None):
         return np.nansum(metric, axis=axis)
     elif reduction == "none":
         return metric
-
 
 class EarlyStopping:
     def __init__(self, patience: int = 3, verbose: bool = False, delta: float = 0):
