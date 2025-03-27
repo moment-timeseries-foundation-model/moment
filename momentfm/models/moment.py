@@ -180,7 +180,12 @@ class MOMENT(nn.Module):
         
         # Channel-independent: n_series=1, Channel_dependent/multivariate prediction: n_series=n_series
         if not hasattr(config, 'n_series'):
-            raise AttributeError("config is missing required attribute 'n_series'")
+            raise AttributeError("config is missing required (int) attribute 'n_series'")
+        if not hasattr(config, 'infini_channel_mixing'):
+            raise AttributeError("config is missing required (bool) attribute 'infini_channel_mixing'")
+            
+        if config.infini_channel_mixing==False:
+            setattr(config, 'n_series', 1)
 
         if config.task_name == 'forecasting':
             self.model = Long_Forecaster(config)
