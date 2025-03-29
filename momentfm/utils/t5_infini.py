@@ -279,9 +279,9 @@ class T5InfiniAttention(nn.Module):
         # new parameters for infini_channel_mixing
         self.use_rope = config.use_rope
         self.elu = nn.ELU()
-        self.n_channels = config.n_series
+        self.n_channels = config.n_channels
         # check on beta initialization --> people have used zeros and random, which one is best?
-        self.beta = nn.Parameter(torch.rand((1, 1, self.n_heads, 1, 1))*1e-2) # Ablation exps: make C=n_series for channel specific beta, can implement lasso for spasifying beta parameters, beta(s) for n_series and n_channels (covariates)
+        self.beta = nn.Parameter(torch.rand((1, 1, self.n_heads, 1, 1))*1e-2) # Ablation exps: make C=n_channels for channel specific beta, can implement lasso for spasifying beta parameters, beta(s) for n_channels
         # Adjust the values to ensure they sum to 0 --> CHECK THIS: we shouldn't need to do this because torch.rand samples from a normal distribution
         with torch.no_grad():
             self.beta -= self.beta.mean()
@@ -370,8 +370,25 @@ class T5InfiniAttention(nn.Module):
             max_distance=self.relative_attention_max_distance,
         )
         values = self.relative_attention_bias(relative_position_bucket)  # shape (query_length, key_length, num_heads)
-        values = values.permute([2, 0, 1]).unsqueeze(0).unsqueeze(0)  # shape (1, 1, num_heads, query_length, key_length) --> NEW: added dimension=1 for n_series
+        values = values.permute([2, 0, 1]).unsqueeze(0).unsqueeze(0)  # shape (1, 1, num_heads, query_length, key_length) --> NEW: added dimension=1 for n_channels
         return values
+    
+    def _update_memory_matrix(self, key_states, value_states):
+        sigma_k = self.elu(key_states) + 1.0  # [batch_size, n_channels, n_heads, n_patch, dim]
+        sigma_k_transposed = sigma_k.transpose(-2, -1) # [batch_size, n_channels, n_heads, dim, n_patch]
+
+        memory_matrix = torch.matmul(sigma_k_transposed, value_states).sum(dim=1).unsqueeze(1) # [batch_size, 1, n_heads, dim, dim] sum over channels then unsqueeze to enable broadcasting over channels
+        
+        z = sigma_k.sum(dim=-2).unsqueeze(-1).sum(dim=1) # [batch_size, n_heads, dim, 1] sum over sequence length and channels
+        z = z.unsqueeze(dim=1) # [batch_size, 1, n_heads, dim, 1]
+        
+        return memory_matrix, z
+    
+    def _retrieve_from_memory(self, query_states, memory_matrix, z):
+        sigma_q = self.elu(query_states) + 1.0 # [batch_size, n_channels, n_heads, n_patch, dim]
+        A_mem = (sigma_q @ memory_matrix) / ((sigma_q @ z) + 1e-6) # [batch_size, n_channels, n_heads, n_patch, dim]/[batch_size, n_channels, n_heads, n_patch, 1] --> [batch_size, n_channels, n_heads, n_patch, dim] Adding 1e-6 for preventing division to 0
+        
+        return A_mem
 
     def forward(
         self,
@@ -385,7 +402,6 @@ class T5InfiniAttention(nn.Module):
         use_cache=False,
         output_attentions=False,
         cache_position=None,
-        n_channels = None
     ):
         """
         Self-attention (if key_value_states is None) or attention over source sentence (provided by key_value_states).
@@ -407,7 +423,7 @@ class T5InfiniAttention(nn.Module):
                                          self.n_channels, 
                                          self.n_heads, 
                                          seq_length,
-                                         self.key_value_proj_dim) # [batch_size, n_series, n_heads, n_patch, dim]
+                                         self.key_value_proj_dim) # [batch_size, n_channels, n_heads, n_patch, dim]
 
         if past_key_value is not None:
             is_updated = past_key_value.is_updated.get(self.layer_idx)
@@ -433,7 +449,7 @@ class T5InfiniAttention(nn.Module):
                                          self.n_channels, 
                                          self.n_heads, 
                                          seq_length,
-                                         self.key_value_proj_dim) # [batch_size, n_series, n_heads, n_patch, dim]
+                                         self.key_value_proj_dim) # [batch_size, n_channels, n_heads, n_patch, dim]
             value_states = value_states.view(batch_size, 
                                              -1, 
                                              self.n_heads, 
@@ -442,7 +458,7 @@ class T5InfiniAttention(nn.Module):
                                              self.n_channels, 
                                              self.n_heads, 
                                              seq_length, 
-                                             self.key_value_proj_dim) # [batch_size, n_series, n_heads, n_patch, dim]
+                                             self.key_value_proj_dim) # [batch_size, n_channels, n_heads, n_patch, dim]
 
             if past_key_value is not None:
                 # save all key/value_states to cache to be re-used for fast auto-regressive generation
@@ -460,8 +476,8 @@ class T5InfiniAttention(nn.Module):
             real_seq_length = query_length if query_length is not None else cache_position[-1] + 1
             if not self.has_relative_attention_bias:
                 position_bias = torch.zeros(
-                    (1, self.n_channels, self.n_heads, seq_length, key_length), device=hidden_states.device, dtype=hidden_states.dtype
-                ) # Willa - should we use n_channels or just 1?
+                    (1, 1, self.n_heads, seq_length, key_length), device=hidden_states.device, dtype=hidden_states.dtype
+                ) # NEW: added dim(1) for n_channels
                 if self.gradient_checkpointing and self.training:
                     position_bias.requires_grad = True
             else:
@@ -473,7 +489,7 @@ class T5InfiniAttention(nn.Module):
             if mask is not None:
                 #causal_mask = mask[:, :, :, :, : key_states.shape[-2]]
                 #position_bias = position_bias + causal_mask
-                mask = mask.view(batch_size//self.n_channels, self.n_channels, 1, seq_length, 1) # [batch_size, n_series, 1, n_patch, 1]
+                mask = mask.view(batch_size//self.n_channels, self.n_channels, 1, seq_length, 1) # [batch_size, n_channels, 1, n_patch, 1]
                 position_bias = position_bias + mask
 
         if self.pruned_heads:
@@ -483,38 +499,33 @@ class T5InfiniAttention(nn.Module):
         else:
             position_bias_masked = position_bias
         
-        # Vectorized infini attention computation across channels
-        sigma_k = self.elu(key_states) + 1.0  # [batch_size, n_series, n_heads, n_patch, dim]
-        sigma_k_transposed = sigma_k.transpose(-2, -1) # [batch_size, n_series, n_heads, dim, n_patch]
-        memory_matrix = torch.matmul(sigma_k_transposed, value_states).sum(dim=1).unsqueeze(1) # [batch_size, 1, n_heads, dim, dim] sum over channels then unsqueeze to enable broadcasting over channels
-        z = sigma_k.sum(dim=-2).unsqueeze(-1).sum(dim=1) # [batch_size, n_heads, dim, 1] sum over sequence length and channels
-        z = z.unsqueeze(dim=1) # [batch_size, 1, n_heads, dim, 1]
-        sigma_q = self.elu(query_states) + 1.0 # [batch_size, n_series, n_heads, n_patch, dim]
-        A_mem = (sigma_q @ memory_matrix) / ((sigma_q @ z) + 1e-6) # [batch_size, n_series, n_heads, n_patch, dim]/[batch_size, n_series, n_heads, n_patch, 1] --> [batch_size, n_series, n_heads, n_patch, dim] Adding 1e-6 for preventing division to 0
+        # Infini attention computation across channels
+        memory_matrix, z = self._update_memory_matrix(key_states, value_states)
+        A_mem = self._retrieve_from_memory(query_states, memory_matrix, z)
 
-        scores = query_states @ key_states.transpose(-2, -1) # [batch_size, n_series, n_heads, n_patch, n_patch]
-        scores += position_bias_masked # [batch_size, n_series, n_heads, n_patch, n_patch]
+        scores = query_states @ key_states.transpose(-2, -1) # [batch_size, n_channels, n_heads, n_patch, n_patch]
+        scores += position_bias_masked # [batch_size, n_channels, n_heads, n_patch, n_patch]
         
         scores = scores / torch.sqrt(torch.tensor(self.key_value_proj_dim, 
                                                   device=hidden_states.device, 
                                                   dtype=torch.float16
                                                   )
-        ) # [batch_size, n_series, n_heads, n_patch, n_patch]
+        ) # [batch_size, n_channels, n_heads, n_patch, n_patch]
 
-        attn_weights = F.softmax(scores, dim=-1) # [batch_size, n_series, n_heads, n_patch, n_patch]
-        attn_weights = nn.functional.dropout(attn_weights, p=self.dropout, training=self.training) # [batch_size, n_series, n_heads, n_patch, n_patch]
+        attn_weights = F.softmax(scores, dim=-1) # [batch_size, n_channels, n_heads, n_patch, n_patch]
+        attn_weights = nn.functional.dropout(attn_weights, p=self.dropout, training=self.training) # [batch_size, n_channels, n_heads, n_patch, n_patch]
 
         # Mask heads if we want to
         if layer_head_mask is not None:
             attn_weights = attn_weights * layer_head_mask
 
-        attn_output = attn_weights @ value_states # [batch_size, n_series, n_heads, n_patch, dim]
+        attn_output = attn_weights @ value_states # [batch_size, n_channels, n_heads, n_patch, dim]
 
-        attn_output = F.sigmoid(self.beta) * A_mem + (1 - F.sigmoid(self.beta)) * attn_output # [batch_size, n_series, n_heads, n_patch, dim]
+        attn_output = F.sigmoid(self.beta) * A_mem + (1 - F.sigmoid(self.beta)) * attn_output # [batch_size, n_channels, n_heads, n_patch, dim]
 
-        attn_output = attn_output.transpose(2, 3).contiguous() # [batch_size, n_series, n_patch, n_heads, dim]
-        attn_output = attn_output.view(batch_size, -1, self.inner_dim) # [batch_size*n_series, n_patch, n_heads*dim]
-        attn_output =  self.o(attn_output) # [batch_size*n_series, n_patch, n_heads*dim]
+        attn_output = attn_output.transpose(2, 3).contiguous() # [batch_size, n_channels, n_patch, n_heads, dim]
+        attn_output = attn_output.view(batch_size, -1, self.inner_dim) # [batch_size*n_channels, n_patch, n_heads*dim]
+        attn_output =  self.o(attn_output) # [batch_size*n_channels, n_patch, n_heads*dim]
 
         outputs = (attn_output, past_key_value, position_bias)
 

@@ -33,9 +33,9 @@ class ForecastingHead(nn.Module):
         x: [batch_size x n_channels x n_patches x d_model]
         output: [batch_size x n_channels x forecast_horizon]
         """
-        x = self.flatten(x)   # x: [batch_size, n_series, n_patches, d_model]
-        x = self.linear(x)    # x: [batch_size, n_series, n_patches*d_model]
-        x = self.dropout(x)   # x: [batch_size, n_series, horizon*c_out]
+        x = self.flatten(x)   # x: [batch_size, n_channels, n_patches, d_model]
+        x = self.linear(x)    # x: [batch_size, n_channels, n_patches*d_model]
+        x = self.dropout(x)   # x: [batch_size, n_channels, horizon*c_out]
         return x
 
 class Long_Forecaster(nn.Module): 
@@ -52,7 +52,7 @@ class Long_Forecaster(nn.Module):
         self.revin = config.revin
         if config.revin:
             self.normalizer = RevIN(
-                num_features=config.n_series, 
+                num_features=config.n_channels, 
                 affine=config.revin_affine
         )
 
@@ -100,7 +100,7 @@ class Long_Forecaster(nn.Module):
         setattr(model_config, 'infini_channel_mixing', configs.infini_channel_mixing)
         setattr(model_config, 'use_rope', configs.use_rope)
         setattr(model_config, 'max_sequence_length', configs.input_size / configs.patch_len)
-        setattr(model_config, 'n_series', configs.n_series)
+        setattr(model_config, 'n_channels', configs.n_channels)
       
         transformer_backbone = ModelClass(model_config)
         logging.info(f"Initializing randomly initialized\
@@ -121,7 +121,7 @@ class Long_Forecaster(nn.Module):
         **kwargs
     ) -> TimeseriesOutputs:
         """
-        x_enc : [batch_size x n_series x seq_len]
+        x_enc : [batch_size x n_channels x seq_len]
         input_mask : [batch_size x seq_len]
         """
 
@@ -134,32 +134,32 @@ class Long_Forecaster(nn.Module):
         x_enc = torch.nan_to_num(x_enc, nan=0, posinf=0, neginf=0) 
         
         # Patching and embedding
-        x_enc = self.tokenizer(x=x_enc) # [batch_size x n_series x n_patch x patch_len]
+        x_enc = self.tokenizer(x=x_enc) # [batch_size x n_channels x n_patch x patch_len]
         enc_in = self.patch_embedding(x_enc, mask=torch.ones_like(input_mask))
     
         n_patches = enc_in.shape[2]
         enc_in = enc_in.reshape(
-            (batch_size * n_channels, n_patches, self.d_model)) # [batch_size*n_series, n_patch, d_model]
+            (batch_size * n_channels, n_patches, self.d_model)) # [batch_size*n_channels, n_patch, d_model]
         
         # Encoder
         attention_mask = Masking.convert_seq_to_patch_view(
             mask=input_mask, 
             patch_len=self.patch_len,
-            stride=self.stride).repeat_interleave(n_channels, dim=0)  # [batch_size*n_series, n_patch]
+            stride=self.stride).repeat_interleave(n_channels, dim=0)  # [batch_size*n_channels, n_patch]
 
         outputs = self.encoder(inputs_embeds=enc_in, attention_mask=attention_mask) 
         enc_out = outputs.last_hidden_state
         
         enc_out = enc_out.reshape(
             (-1, n_channels, n_patches, self.d_model)) 
-        # [batch_size, n_series, n_patch, d_model]
+        # [batch_size, n_channels, n_patch, d_model]
 
         # Decoder
-        dec_out = self.head(enc_out) # [batch_size, n_series, horizon*c_out]
+        dec_out = self.head(enc_out) # [batch_size, n_channels, horizon*c_out]
         
         # De-Normalization
         if self.revin:
-            dec_out = self.normalizer(x=dec_out, mode='denorm') # [batch_size, n_series, horizon*c_out]
+            dec_out = self.normalizer(x=dec_out, mode='denorm') # [batch_size, n_channels, horizon*c_out]
 
         return TimeseriesOutputs(input_mask=input_mask, forecast=dec_out)
 
@@ -178,14 +178,14 @@ class MOMENT(nn.Module):
         self.h = config.h
         self.input_size = config.input_size
         
-        # Channel-independent: n_series=1, Channel_dependent/multivariate prediction: n_series=n_series
-        if not hasattr(config, 'n_series'):
-            raise AttributeError("config is missing required (int) attribute 'n_series'")
+        # Channel-independent: n_channels=1, Channel_dependent/multivariate prediction: n_channels=n_channels
+        if not hasattr(config, 'n_channels'):
+            raise AttributeError("config is missing required (int) attribute 'n_channels'")
         if not hasattr(config, 'infini_channel_mixing'):
             raise AttributeError("config is missing required (bool) attribute 'infini_channel_mixing'")
             
         if config.infini_channel_mixing==False:
-            setattr(config, 'n_series', 1)
+            setattr(config, 'n_channels', 1)
 
         if config.task_name == 'forecasting':
             self.model = Long_Forecaster(config)
@@ -201,8 +201,8 @@ class MOMENT(nn.Module):
         **kwargs,
     ) -> TimeseriesOutputs:
 
-        #x_enc: [batch_size, n_series, seq_len]
+        #x_enc: [batch_size, n_channels, seq_len]
         if input_mask is None:
             input_mask = torch.ones_like(x_enc[:, 0, :])
             
-        return self.model(x_enc=x_enc, mask=mask, input_mask=input_mask, **kwargs) #dec_out: [batch_size, n_series, horizon*c_out]
+        return self.model(x_enc=x_enc, mask=mask, input_mask=input_mask, **kwargs) #dec_out: [batch_size, n_channels, horizon*c_out]
