@@ -11,6 +11,7 @@
 </div>
 
 ## 🔥 News
+- Interested in LLM Agents for (Time Series) Machine Learning Engineering? Check out our latest work [TimeSeriesGym: A Scalable Benchmark for Time Series Machine Learning Engineering Agents](https://github.com/moment-timeseries-foundation-model/TimeSeriesGym)
 - We just released the [small](https://huggingface.co/AutonLab/MOMENT-1-small) and [base](https://huggingface.co/AutonLab/MOMENT-1-base) versions of the MOMENT model. 
 - 🔥🔥🔥 We released [MOMENT research](https://github.com/moment-timeseries-foundation-model/moment-research) code, so you can pre-train your own time series foundation model, with your own data, and reproduce experiments from [our paper](https://arxiv.org/abs/2402.03885)!
 - We fixed an issue with Classification where MOMENT was unable to handle multi-channel inputs. 
