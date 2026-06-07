@@ -126,6 +126,45 @@ model = MOMENTPipeline.from_pretrained(
 model.init()
 ```
 
+## 🧩 scikit-learn Integration
+
+MOMENT can be used inside `sklearn.pipeline.Pipeline` and any other sklearn
+tooling via the adapters in `momentfm.sklearn_adapter`:
+
+```python
+from momentfm.sklearn_adapter import (
+    MOMENTAnomalyDetector,
+    MOMENTForecaster,
+    MOMENTEmbedder,
+)
+import numpy as np
+
+# Anomaly detection — reconstruction MSE as the score
+detector = MOMENTAnomalyDetector(model_name="AutonLab/MOMENT-1-small")
+detector.fit()  # zero-shot — loads the pretrained weights
+X = np.random.randn(8, 512).astype(np.float32)  # (n_samples, context_length)
+scores = detector.transform(X)  # (n_samples,) per-sample anomaly score
+
+# Forecasting — predict the next `forecast_horizon` steps
+forecaster = MOMENTForecaster(forecast_horizon=96)
+forecaster.fit()
+y_hat = forecaster.predict(X)  # (n_samples, forecast_horizon)
+
+# Embedding — drop the encoder output into a downstream sklearn classifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+pipe = Pipeline([
+    ("embed", MOMENTEmbedder(model_name="AutonLab/MOMENT-1-small")),
+    ("clf", LogisticRegression()),
+])
+```
+
+All three adapters accept either 2D `(n_samples, n_channels * context_length)`
+input (sklearn pipeline convention) or 3D `(n_samples, n_channels, context_length)`
+(MOMENT native).  `fit()` loads the pretrained weights; no training is performed
+by default — pass the loaded estimator into a downstream sklearn step or call
+`transform`/`predict` directly for zero-shot inference.
+
 ## 🧑‍🏫 Tutorials
 
 <!-- We provide tutorials to demonstrate how to use and fine-tune our pre-trained model on various tasks. -->
