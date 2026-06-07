@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: py${{ matrix.python-version }} · numpy${{ matrix.numpy-spec }} · tx${{ matrix.transformers-spec }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Baseline: the pyproject lower bounds.
+          - python-version: "3.10"
+            numpy-spec: "==1.26.4"
+            transformers-spec: "==4.54.1"
+            torch-spec: "==2.0.1"
+
+          # Mid-range: a popular interim version.
+          - python-version: "3.11"
+            numpy-spec: "==1.26.4"
+            transformers-spec: ">=4.54.1,<5.0"
+            torch-spec: ">=2.0.1"
+
+          # Frontier: numpy 2.x + transformers 5.x.
+          # This is the matrix entry that, if green, unblocks a pypi
+          # release. It is the load-bearing one for downstream users
+          # who have already moved to numpy 2.x.
+          - python-version: "3.12"
+            numpy-spec: ">=2.0"
+            transformers-spec: ">=5.0"
+            torch-spec: ">=2.4"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install matrix-pinned core dependencies
+        run: |
+          pip install "numpy${{ matrix.numpy-spec }}"
+          pip install "torch${{ matrix.torch-spec }}" --index-url https://download.pytorch.org/whl/cpu
+          pip install "transformers${{ matrix.transformers-spec }}"
+
+      - name: Install momentfm from source
+        run: pip install -e .
+
+      - name: Install dev dependencies
+        run: pip install pytest
+
+      - name: Import smoke
+        run: |
+          python -c "import momentfm; print('momentfm import OK')"
+          python -c "from momentfm import MOMENTPipeline; print('MOMENTPipeline import OK')"
+          python -c "from momentfm import MOMENT; print('MOMENT import OK')"
+
+      - name: Run pytest
+        run: pytest -v --tb=short
